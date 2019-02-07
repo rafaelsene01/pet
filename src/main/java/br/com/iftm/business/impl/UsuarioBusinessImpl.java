@@ -23,6 +23,8 @@ public class UsuarioBusinessImpl implements UsuarioBusiness {
 	public Usuario create(Usuario usuario) throws BusinessException {
 		if (StringUtils.isEmpty(usuario.getNome()))
 			throw new BusinessException("Nome Requerido!");
+		if (usuario.getNome().length() >= 100)
+			throw new BusinessException("Tamanho do nome excedido");
 		if (StringUtils.isEmpty(usuario.getEmail()))
 			throw new BusinessException("Email Requerido!");
 		if (StringUtils.isEmpty(usuario.getSenha()))
