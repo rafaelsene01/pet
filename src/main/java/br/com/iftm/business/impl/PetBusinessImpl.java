@@ -21,7 +21,7 @@ public class PetBusinessImpl implements PetBusiness {
 	@Override
 	@Transactional(readOnly = true)
 	public List<RacaTipo> read(Pet pet) throws BusinessException {
-		if (pet.getIdRaca() == null)
+		if (pet.getIdTipo() == null)
 			throw new BusinessException("ID Raça Requerido!");
 
 		return dao.read(pet);
