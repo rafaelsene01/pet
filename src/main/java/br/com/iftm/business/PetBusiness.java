@@ -9,4 +9,6 @@ public interface PetBusiness {
 
 	List<RacaTipo> read(Pet pet) throws BusinessException;
 
+	Pet readId(Pet pet) throws BusinessException;
+
 }

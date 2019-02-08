@@ -27,4 +27,15 @@ public class PetBusinessImpl implements PetBusiness {
 		return dao.read(pet);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public Pet readId(Pet pet) throws BusinessException {
+		if (pet.getIdTipo() == null)
+			throw new BusinessException("ID Animal Requerido!");
+		if (pet.getIdRaca() == null)
+			throw new BusinessException("ID Raça Requerido!");
+
+		return dao.readId(pet);
+	}
+
 }

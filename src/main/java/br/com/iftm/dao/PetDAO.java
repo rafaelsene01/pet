@@ -9,4 +9,6 @@ public interface PetDAO {
 
 	List<RacaTipo> read(Pet pet);
 
+	Pet readId(Pet pet);
+
 }

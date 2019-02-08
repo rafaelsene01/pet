@@ -1,33 +1,31 @@
 package br.com.iftm.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.iftm.business.BusinessException;
-import br.com.iftm.business.PetBusiness;
-import br.com.iftm.entity.Pet;
-import br.com.iftm.entity.RacaTipo;
+import br.com.iftm.business.EventoBusiness;
+import br.com.iftm.entity.Evento;
 
 @RestController
-@RequestMapping(value = "pet")
-public class PetRest {
+@RequestMapping(value = "evento")
+public class EventoRest {
 
 	@Autowired
-	private PetBusiness business;
+	private EventoBusiness business;
 
 	@PostMapping()
-	public ResponseEntity<?> read(@RequestBody Pet pet) {
+	public ResponseEntity<?> create(@RequestBody Evento evento) {
 
 		try {
-			List<RacaTipo> racas = business.read(pet);
+			evento = business.create(evento);
 
-			return ResponseEntity.ok(racas);
+			return ResponseEntity.ok(evento);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
@@ -40,10 +38,10 @@ public class PetRest {
 	}
 
 	// read
-	@PostMapping("/id")
-	public ResponseEntity<?> readId(@RequestBody Pet pet) {
+	@GetMapping
+	public ResponseEntity<?> read() {
 		try {
-			return ResponseEntity.ok(business.readId(pet));
+			return ResponseEntity.ok(business.read());
 
 		} catch (BusinessException e) {
 			e.printStackTrace();

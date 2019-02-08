@@ -17,16 +17,16 @@ import javax.persistence.UniqueConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "TB_TELEFONE", uniqueConstraints = { @UniqueConstraint(name = "UNQ_TELEFONE", columnNames = {
-		"COD_PRESTADOR_SERVICO", "DDD_TELEFONE", "NUM_TELEFONE" }) })
-@SequenceGenerator(name = "SQ_TELEFONE", sequenceName = "SQ_TELEFONE", initialValue = 1, allocationSize = 1)
-@JsonIgnoreProperties(value = { "prestadorServico" })
+@Table(name = "TB_TELEFONE", schema = "GAD", uniqueConstraints = {
+		@UniqueConstraint(name = "UNQ_TELEFONE", columnNames = { "ID_EVENTO", "DDD_TELEFONE", "NUM_TELEFONE" }) })
+@SequenceGenerator(name = "SQ_TELEFONE", sequenceName = "SQ_TELEFONE", initialValue = 1, allocationSize = 1, schema = "GAD")
+@JsonIgnoreProperties(value = { "evento" })
 public class Telefone {
 
 	@Id
-	@Column(name = "COD_TELEFONE")
+	@Column(name = "ID_TELEFONE")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_TELEFONE")
-	private Integer codigo;
+	private Integer id;
 
 	@Column(name = "DDD_TELEFONE", nullable = false)
 	private Integer ddd;
@@ -34,16 +34,24 @@ public class Telefone {
 	@Column(name = "NUM_TELEFONE", nullable = false)
 	private Integer numero;
 
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = PrestadorServico.class)
-	@JoinColumn(name = "COD_PRESTADOR_SERVICO", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "FK_TB_TELEF_TB_PRESTADOR_SERV"))
-	private PrestadorServico prestadorServico;
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Evento.class)
+	@JoinColumn(name = "ID_EVENTO", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "FK_TB_TELEF_TB_EVENTO"))
+	private Evento evento;
 
-	public Integer getCodigo() {
-		return codigo;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setCodigo(Integer codigo) {
-		this.codigo = codigo;
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Evento getEvento() {
+		return evento;
+	}
+
+	public void setEvento(Evento evento) {
+		this.evento = evento;
 	}
 
 	public Integer getDdd() {
@@ -60,13 +68,5 @@ public class Telefone {
 
 	public void setNumero(Integer numero) {
 		this.numero = numero;
-	}
-
-	public PrestadorServico getPrestadorServico() {
-		return prestadorServico;
-	}
-
-	public void setPrestadorServico(PrestadorServico prestadorServico) {
-		this.prestadorServico = prestadorServico;
 	}
 }

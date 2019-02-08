@@ -44,4 +44,13 @@ public class PetDAOImpl implements PetDAO {
 		return animais;
 	}
 
+	@Override
+	public Pet readId(Pet pet) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Pet.class);
+		criteria.add(Restrictions.eq("idTipo", pet.getIdTipo()));
+		criteria.add(Restrictions.eq("idRaca", pet.getIdRaca()));
+
+		return (Pet) criteria.uniqueResult();
+	}
+
 }
