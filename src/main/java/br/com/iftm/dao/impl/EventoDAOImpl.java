@@ -1,13 +1,17 @@
 package br.com.iftm.dao.impl;
 
-import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import br.com.iftm.business.BusinessException;
+import br.com.iftm.controller.dto.FiltroEventoDTO;
 import br.com.iftm.dao.EventoDAO;
 import br.com.iftm.entity.Evento;
 
@@ -18,22 +22,21 @@ public class EventoDAOImpl implements EventoDAO {
 	private SessionFactory sessionFactory;
 
 	@Override
-	public Evento create(Evento evento) throws BusinessException {
+	public List<Evento> read(FiltroEventoDTO filtroEventoDTO) throws BusinessException {
 
-		Date d = new Date();
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Evento.class);
 
-		evento.setStatus(true);
-		evento.setData(d);
+		criteria.add(Restrictions.eq("status", true));
 
-		sessionFactory.getCurrentSession().save(evento);
-		sessionFactory.getCurrentSession().flush();
+		if (filtroEventoDTO.getTipoEvento() != null)
+			criteria.add(Restrictions.eq("tipo_evento", filtroEventoDTO.getTipoEvento()));
+		if (filtroEventoDTO.getIdPet() != null)
+			criteria.add(Restrictions.eq("id_pet", filtroEventoDTO.getIdPet()));
+		if (!StringUtils.isEmpty(filtroEventoDTO.getLocal()))
+			criteria.add(Restrictions.like("local", filtroEventoDTO.getLocal(), MatchMode.ANYWHERE).ignoreCase());
 
-		return evento;
-	}
-
-	@Override
-	public List<Evento> read() throws BusinessException {
-		return sessionFactory.getCurrentSession().createCriteria(Evento.class).list();
+		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();// dados vultando duplicado tive que
+																					// usar o retorno deata maneira
 	}
 
 }

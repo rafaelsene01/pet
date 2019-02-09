@@ -32,7 +32,7 @@ public class DAOConfig {
 		dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
 		dataSource.setUrl("jdbc:oracle:thin:@//localhost:1521/xe");
 		dataSource.setUsername("system");
-		dataSource.setPassword("IFTM1234#");
+		dataSource.setPassword("admin");
 
 		return dataSource;
 	}

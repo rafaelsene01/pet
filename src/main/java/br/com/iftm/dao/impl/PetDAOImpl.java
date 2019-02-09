@@ -29,7 +29,21 @@ public class PetDAOImpl implements PetDAO {
 		Criteria todasRacas = sessionFactory.getCurrentSession().createCriteria(RacaTipo.class);
 		List<RacaTipo> filtroRacas = todasRacas.list();
 
+		/*
+		 * todasRacas.add( Restrictions.
+		 * sqlRestriction("select raca.id_raca_tipo, raca.nome_raca_tipo from GAD.tb_raca_tipo raca,"
+		 * + " GAD.tb_pet pet where pet.id_tipo_pet = " + pet.getIdTipo() +
+		 * " and pet.id_raca_tipo = raca.id_raca_tipo"));
+		 * 
+		 * todasRacas.addQueryHint(
+		 * "select raca.id_raca_tipo, raca.nome_raca_tipo from GAD.tb_raca_tipo raca, GAD.tb_pet pet "
+		 * + "where pet.id_tipo_pet = " + pet.getIdTipo() +
+		 * " and pet.id_raca_tipo = raca.id_raca_tipo");
+		 */
+
 		List<RacaTipo> animais = new ArrayList<>();
+
+		// Arruma a condicao abaixo em uma query
 
 		for (int i = 0; i < filtroPet.size(); i++) {
 			for (int j = 0; j < filtroRacas.size(); j++) {

@@ -1,7 +1,11 @@
 package br.com.iftm.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,25 +13,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.iftm.business.BusinessException;
-import br.com.iftm.business.UsuarioBusiness;
+import br.com.iftm.business.UsuarioEventoBusiness;
 import br.com.iftm.controller.dto.AuthUsuario;
-import br.com.iftm.entity.Usuario;
+import br.com.iftm.entity.Evento;
 
 @RestController
 @RequestMapping(value = "usuario")
-public class UsuarioRest {
+public class UsuarioEventoRest {
 
 	@Autowired
-	private UsuarioBusiness business;
+	private UsuarioEventoBusiness business;
 
-	// create
-	@PostMapping("/create")
-	public ResponseEntity<?> create(@RequestBody Usuario usuario) {
+	@PostMapping("/evento")
+	public ResponseEntity<?> create(@RequestBody Evento evento) {
 
 		try {
-			usuario = business.create(usuario);
+			evento = business.create(evento);
 
-			return ResponseEntity.ok(usuario);
+			return ResponseEntity.ok(evento);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
@@ -37,17 +40,15 @@ public class UsuarioRest {
 
 			return ResponseEntity.badRequest().body(e);
 		}
-
 	}
 
-	// auth
-	@PostMapping("/authentication")
-	public ResponseEntity<?> auth(@RequestBody Usuario usuario) {
+	@PostMapping()
+	public ResponseEntity<?> ready(@RequestBody AuthUsuario authUsuario) {
 
 		try {
-			AuthUsuario auth = business.auth(usuario);
+			List<Evento> evento = business.ready(authUsuario);
 
-			return ResponseEntity.ok(auth);
+			return ResponseEntity.ok(evento);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
@@ -57,26 +58,39 @@ public class UsuarioRest {
 
 			return ResponseEntity.badRequest().body(e);
 		}
-
 	}
 
-	// update
-	@PutMapping
-	public ResponseEntity<?> update(@RequestBody Usuario usuario) {
+	@PutMapping("/evento")
+	public ResponseEntity<?> update(@RequestBody Evento evento) {
 
 		try {
-			usuario = business.update(usuario);
+			evento = business.update(evento);
 
-			return ResponseEntity.ok(usuario);
+			return ResponseEntity.ok(evento);
 		} catch (BusinessException e) {
 			e.printStackTrace();
-
 			return ResponseEntity.badRequest().body(e);
 		} catch (Exception e) {
 			e.printStackTrace();
-
 			return ResponseEntity.badRequest().body(e);
 		}
-
 	}
+
+	@DeleteMapping(value = "/evento/{id}")
+	public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+
+		try {
+
+			business.delete(id);
+
+			return ResponseEntity.ok().build();
+		} catch (BusinessException e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(e);
+		}
+	}
+
 }
