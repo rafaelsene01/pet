@@ -46,6 +46,12 @@ public class UsuarioEventoDAOImpl implements UsuarioEventoDAO {
 
 	@Override
 	public Evento update(Evento evento) throws BusinessException {
+
+		if (evento.getStatus()) {
+			Date d = new Date();
+			evento.setData(d);
+		}
+
 		sessionFactory.getCurrentSession().update(evento);
 		sessionFactory.getCurrentSession().flush();
 
