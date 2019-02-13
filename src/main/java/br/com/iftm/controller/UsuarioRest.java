@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -30,9 +31,29 @@ public class UsuarioRest {
 	public ResponseEntity<?> createUsuario(@RequestBody Usuario usuario) {
 
 		try {
-			usuario = business.createUsuario(usuario);
+			AuthUsuario userAuth = business.createUsuario(usuario);
 
-			return ResponseEntity.ok(usuario);
+			return ResponseEntity.ok(userAuth);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+			return ResponseEntity.badRequest().body(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return ResponseEntity.badRequest().body(e);
+		}
+
+	}
+
+	// create
+	@PostMapping("/perfilUsuario")
+	public ResponseEntity<?> readUsuario(@RequestBody AuthUsuario usuario) {
+
+		try {
+			Usuario user = business.readUsuario(usuario);
+
+			return ResponseEntity.ok(user);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 
@@ -104,10 +125,10 @@ public class UsuarioRest {
 	}
 
 	@PostMapping()
-	public ResponseEntity<?> readyMyEvento(@RequestBody AuthUsuario authUsuario) {
+	public ResponseEntity<?> readMyEvento(@RequestBody AuthUsuario authUsuario) {
 
 		try {
-			List<Evento> evento = business.readyMyEvento(authUsuario);
+			List<Evento> evento = business.readMyEvento(authUsuario);
 
 			return ResponseEntity.ok(evento);
 		} catch (BusinessException e) {
@@ -150,6 +171,25 @@ public class UsuarioRest {
 			return ResponseEntity.badRequest().body(e);
 		} catch (Exception e) {
 			e.printStackTrace();
+			return ResponseEntity.badRequest().body(e);
+		}
+	}
+
+	// delete
+	@GetMapping(value = "/evento/{id}")
+	public ResponseEntity<?> readEventoId(@PathVariable("id") Integer id) {
+
+		try {
+			Evento evento = business.readEventoId(id);
+
+			return ResponseEntity.ok(evento);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+
+			return ResponseEntity.badRequest().body(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+
 			return ResponseEntity.badRequest().body(e);
 		}
 	}

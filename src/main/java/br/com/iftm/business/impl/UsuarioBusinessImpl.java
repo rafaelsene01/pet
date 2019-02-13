@@ -24,7 +24,7 @@ public class UsuarioBusinessImpl implements UsuarioBusiness {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Usuario createUsuario(Usuario usuario) throws BusinessException {
+	public AuthUsuario createUsuario(Usuario usuario) throws BusinessException {
 		if (StringUtils.isEmpty(usuario.getNome()))
 			throw new BusinessException("Nome Requerido!");
 		if (usuario.getNome().length() >= 100)
@@ -35,6 +35,17 @@ public class UsuarioBusinessImpl implements UsuarioBusiness {
 			throw new BusinessException("Senha Requerido!");
 
 		return dao.createUsuario(usuario);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Usuario readUsuario(AuthUsuario usuario) throws BusinessException {
+		if (usuario.getId() == null)
+			throw new BusinessException("ID Requerido!");
+		if (StringUtils.isEmpty(usuario.getToken()))
+			throw new BusinessException("TOKEN Requerido!");
+
+		return dao.readUsuario(usuario);
 	}
 
 	@Override
@@ -146,14 +157,24 @@ public class UsuarioBusinessImpl implements UsuarioBusiness {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Evento> readyMyEvento(AuthUsuario authUsuario) throws BusinessException {
+	public List<Evento> readMyEvento(AuthUsuario authUsuario) throws BusinessException {
 
 		if (authUsuario.getId() == null)
 			throw new BusinessException("ID Requerido!");
 		if (StringUtils.isEmpty(authUsuario.getToken()))
 			throw new BusinessException("TOKEN Requerido!");
 
-		return dao.readyMyEvento(authUsuario);
+		return dao.readMyEvento(authUsuario);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Evento readEventoId(Integer id) throws BusinessException {
+
+		if (id == null)
+			throw new BusinessException("ID Requerido!");
+
+		return dao.readEventoId(id);
 	}
 
 }

@@ -24,12 +24,34 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	private SessionFactory sessionFactory;
 
 	@Override
-	public Usuario createUsuario(Usuario usuario) throws BusinessException {
+	public AuthUsuario createUsuario(Usuario usuario) throws BusinessException {
 
 		sessionFactory.getCurrentSession().save(usuario);
 		sessionFactory.getCurrentSession().flush();
 
-		return usuario;
+		AuthUsuario userAuth = new AuthUsuario();
+		userAuth.setId(usuario.getId());
+		userAuth.setToken(usuario.getSenha());
+
+		return userAuth;
+	}
+
+	@Override
+	public Usuario readUsuario(AuthUsuario usuario) throws BusinessException {
+
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Usuario.class);
+		criteria = criteria.add(Restrictions.eq("id", usuario.getId()));
+		Usuario usuarioDB = (Usuario) criteria.uniqueResult();
+
+		if (usuarioDB != null) {
+			String simpleBase64 = Base64.getEncoder()
+					.encodeToString((usuarioDB.getEmail() + usuarioDB.getSenha()).getBytes(StandardCharsets.UTF_8));
+			if (usuario.getToken().equals(simpleBase64)) {
+				return usuarioDB;
+			}
+		}
+
+		return null;
 	}
 
 	@Override
@@ -96,7 +118,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	}
 
 	@Override
-	public List<Evento> readyMyEvento(AuthUsuario authUsuario) throws BusinessException {
+	public List<Evento> readMyEvento(AuthUsuario authUsuario) throws BusinessException {
 
 		Criteria usuario = sessionFactory.getCurrentSession().createCriteria(Usuario.class);
 		usuario.add(Restrictions.eq("id", authUsuario.getId()));
@@ -116,6 +138,12 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		}
 
 		return null;
+	}
+
+	@Override
+	public Evento readEventoId(Integer id) throws BusinessException {
+
+		return sessionFactory.getCurrentSession().get(Evento.class, id);
 	}
 
 }

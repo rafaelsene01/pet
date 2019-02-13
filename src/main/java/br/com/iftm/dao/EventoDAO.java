@@ -10,4 +10,6 @@ public interface EventoDAO {
 
 	List<Evento> read(FiltroEventoDTO filtroEventoDTO) throws BusinessException;
 
+	List<String> readLocal() throws BusinessException;
+
 }

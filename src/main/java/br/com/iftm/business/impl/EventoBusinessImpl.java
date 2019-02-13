@@ -24,4 +24,11 @@ public class EventoBusinessImpl implements EventoBusiness {
 		return dao.read(filtroEventoDTO);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<String> readLocal() throws BusinessException {
+
+		return dao.readLocal();
+	}
+
 }

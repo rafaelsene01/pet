@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -37,6 +38,14 @@ public class EventoDAOImpl implements EventoDAO {
 
 		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();// dados vultando duplicado tive que
 																					// usar o retorno deata maneira
+	}
+
+	@Override
+	public List<String> readLocal() {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Evento.class);
+		criteria.setProjection(Projections.groupProperty("local"));
+
+		return criteria.list();
 	}
 
 }

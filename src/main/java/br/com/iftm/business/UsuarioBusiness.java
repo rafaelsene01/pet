@@ -8,7 +8,9 @@ import br.com.iftm.entity.Usuario;
 
 public interface UsuarioBusiness {
 
-	Usuario createUsuario(Usuario usuario) throws BusinessException;
+	AuthUsuario createUsuario(Usuario usuario) throws BusinessException;
+
+	Usuario readUsuario(AuthUsuario usuario) throws BusinessException;
 
 	AuthUsuario auth(Usuario usuario) throws BusinessException;
 
@@ -16,9 +18,11 @@ public interface UsuarioBusiness {
 
 	Evento createEvento(Evento evento) throws BusinessException;
 
-	List<Evento> readyMyEvento(AuthUsuario authUsuario) throws BusinessException;
+	List<Evento> readMyEvento(AuthUsuario authUsuario) throws BusinessException;
 
 	void deleteEvento(Integer id) throws BusinessException;
 
 	Evento updateEvento(Evento evento) throws BusinessException;
+
+	Evento readEventoId(Integer id) throws BusinessException;
 }
